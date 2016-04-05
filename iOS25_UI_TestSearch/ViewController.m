@@ -8,9 +8,8 @@
 
 #import "ViewController.h"
 
-@interface ViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchDisplayDelegate,UISearchResultsUpdating>
+@interface ViewController ()<UITableViewDelegate,UITableViewDataSource,UISearchDisplayDelegate>
 {
-    UISearchController * searchController;
     UISearchDisplayController * disPlay;
     UITableView * mytableView;
 }
@@ -48,23 +47,10 @@
     /*指定刚刚创建的searchbar为tableView的头视图*/
     mytableView.tableHeaderView = disPlay.searchBar;
     [self.view addSubview:mytableView];
-    /*
-    searchController = [[UISearchController alloc]initWithSearchResultsController:nil];
-    searchController.searchResultsUpdater = self;
-    searchController.dimsBackgroundDuringPresentation = NO;
-    searchController.hidesNavigationBarDuringPresentation = NO;
-    searchController.searchBar.frame = CGRectMake(searchController.searchBar.frame.origin.x, searchController.searchBar.frame.origin.y, searchController.searchBar.frame.size.width, 44.0);*/
-//    mytableView.tableHeaderView = searchController.searchBar;
-
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    /*
-    if (searchController.active) {
-        return [self.searchList count];
-    }else{
-        return [self.dataList count];
-    }*/
+
     if (tableView == disPlay.searchResultsTableView) {
         return [self.searchList count];
     }else{
@@ -73,14 +59,6 @@
 }
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString{
     NSLog(@"%@",searchString);
-    /*
-    // 谓词的包含语法,之前文章介绍过http://www.cnblogs.com/xiaofeixiang/
-    NSPredicate *preicate = [NSPredicate predicateWithFormat:@"SELF CONTAINS[c] %@", searchString];
-    if (self.searchList!= nil) {
-        [self.searchList removeAllObjects];
-    }
-    //过滤数据
-    self.searchList= [NSMutableArray arrayWithArray:[_dataList filteredArrayUsingPredicate:preicate]];*/
     /*self.searchList在最开始创建用来存放搜索结果*/
     if (self.searchList.count != 0) {
         [self.searchList removeAllObjects];
@@ -102,13 +80,6 @@
     if (!cell) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
-    /*
-    if (searchController.active) {
-        [cell.textLabel setText:self.searchList[indexPath.row]];
-    }
-    else{
-        [cell.textLabel setText:self.dataList[indexPath.row]];
-    }*/
     if (tableView==disPlay.searchResultsTableView) {
         [cell.textLabel setText:self.searchList[indexPath.row]];
     }
@@ -117,21 +88,8 @@
     }
     return cell;
 }
-/*
--(void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    NSString *searchString = [searchController.searchBar text];
-    NSPredicate *preicate = [NSPredicate predicateWithFormat:@"SELF CONTAINS[c] %@", searchString];
-    if (self.searchList!= nil) {
-        [self.searchList removeAllObjects];
-    }
-    //过滤数据
-    self.searchList= [NSMutableArray arrayWithArray:[_dataList filteredArrayUsingPredicate:preicate]];
-    //刷新表格
-    [mytableView reloadData];
-}*/
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [searchController.searchBar resignFirstResponder];
     [disPlay.searchBar resignFirstResponder];
 }
 - (void)didReceiveMemoryWarning {
